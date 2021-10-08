@@ -5,14 +5,8 @@ using UnityEngine;
 public class Thief : MonoBehaviour
 {
     [SerializeField] private float _speed = 10;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
         if (Input.GetKey(KeyCode.D))
             transform.Translate(Vector2.right * Time.deltaTime * _speed);
