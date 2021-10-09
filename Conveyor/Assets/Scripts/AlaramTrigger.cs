@@ -11,6 +11,8 @@ public class AlaramTrigger : MonoBehaviour
     [SerializeField] private AudioSource _alarm;
     [SerializeField] private float _currentLoudness = 0f;
     [SerializeField] private float _duration = 3;
+    [SerializeField] private Coroutine _couroutineDecreaseLoudness;
+    [SerializeField] private Coroutine _couroutineIncreaseLoudness;
 
     private void Start()
     {
@@ -21,18 +23,20 @@ public class AlaramTrigger : MonoBehaviour
     {
         if (collision.TryGetComponent<Thief> (out Thief thief))
         {
+            if(_couroutineDecreaseLoudness!=null)
+                StopCoroutine(_couroutineDecreaseLoudness);
+
             _alarm.Play();
-            StopAllCoroutines();
             _currentLoudness = _alarm.volume;
-            StartCoroutine(IncreaseLoudness());
+            _couroutineIncreaseLoudness = StartCoroutine(IncreaseLoudness());
         }
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        StopAllCoroutines();
+        StopCoroutine(_couroutineIncreaseLoudness);
         _currentLoudness = _alarm.volume;
-        StartCoroutine(DecreaseLoudness());
+        _couroutineDecreaseLoudness = StartCoroutine(DecreaseLoudness());
     }
 
     private IEnumerator IncreaseLoudness()
